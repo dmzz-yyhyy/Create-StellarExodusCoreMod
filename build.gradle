@@ -14,9 +14,17 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'net.minecraftforge.gradle' version '[6.0.16,6.2)'
+    id 'org.jetbrains.kotlin.jvm' version '1.9.22'
 }
 
 apply plugin: 'org.spongepowered.mixin'
+
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = false
+    }
+}
 
 group = mod_group_id
 version = mod_version
@@ -118,6 +126,8 @@ minecraft {
 
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
             args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            // Required by Create Big Cannons datagen.
+            property 'createbigcannons.datagen.platform', 'forge'
         }
     }
 }
@@ -137,7 +147,6 @@ repositories {
     maven { url = 'https://maven.createmod.net/' } // Create ecosystem (Ponder/Flywheel)
     maven { url = 'https://maven.tterrag.com/' } // Create/Flywheel maven
     maven { url = 'https://api.modrinth.com/maven' } // Modrinth maven (generic)
-
     // Direct Modrinth CDN fallbacks (no POM) for Create and Create Big Cannons
     ivy {
         name = 'ModrinthCreateCDN'
@@ -201,12 +210,15 @@ dependencies {
     implementation fg.deobf("custom.modrinth:cbc_at_Forge_1.20.1:0.1.3b")
     // Ritchie's Projectile Library (required by Create Big Cannons)
     runtimeOnly fg.deobf("custom.modrinth:ritchiesprojectilelib:2.1.1+mc.1.20.1-forge")
-    // Registrate (compile-time only; runtime provided by Create's bundled copy)
+    // Registrate (required at runtime by this mod)
     compileOnly fg.deobf("com.tterrag.registrate:Registrate:MC1.20-1.3.3")
     // Ponder API (remote, compile-time only)
     compileOnly fg.deobf("net.createmod.ponder:Ponder-Forge-1.20.1:1.0.80")
     // Flywheel API/impl (needed for Create renderer types)
     compileOnly fg.deobf("dev.engine-room.flywheel:flywheel-forge-1.20.1:1.0.4")
+    // Kotlin support for Forge (Modrinth Maven)
+    // Avoid deobf remapping; the Modrinth jar triggers duplicate kotlin_module entries in the remapper.
+    implementation "maven.modrinth:kotlin-for-forge:4.10.0"
 
     // For more info:
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
@@ -256,4 +268,10 @@ tasks.named('jar', Jar).configure {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+    kotlinOptions.jvmTarget = '17'
+    // Write Kotlin classes into the Java output to avoid split-package module errors.
+    destinationDirectory.set(file("$buildDir/classes/java/main"))
 }
