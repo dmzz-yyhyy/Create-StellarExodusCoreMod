@@ -43,6 +43,20 @@ object ModNetwork {
             AutoAimTurretFilterSyncPacket::decode,
             AutoAimTurretFilterSyncPacket::handle
         )
+        registerMessage(
+            index++,
+            SaveShuttleStructurePacket::class.java,
+            SaveShuttleStructurePacket::encode,
+            SaveShuttleStructurePacket::decode,
+            SaveShuttleStructurePacket::handle
+        )
+        registerMessage(
+            index++,
+            PlaceShuttleStructurePacket::class.java,
+            PlaceShuttleStructurePacket::encode,
+            PlaceShuttleStructurePacket::decode,
+            PlaceShuttleStructurePacket::handle
+        )
     }
 
     @Suppress("INFERRED_INVISIBLE_RETURN_TYPE_WARNING")

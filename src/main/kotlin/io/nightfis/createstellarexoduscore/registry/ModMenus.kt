@@ -3,26 +3,31 @@ package io.nightfis.createstellarexoduscore.registry
 import com.tterrag.registrate.util.entry.MenuEntry
 import io.nightfis.createstellarexoduscore.StellarExodusCore
 import io.nightfis.createstellarexoduscore.client.gui.screen.AutoAimTurretScreen
+import io.nightfis.createstellarexoduscore.client.gui.screen.StellarShuttleControllerScreen
 import io.nightfis.createstellarexoduscore.inventory.AutoAimTurretMenu
-import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.network.chat.Component
-import net.minecraft.world.entity.player.Inventory
-import net.minecraft.world.inventory.MenuType
+import io.nightfis.createstellarexoduscore.inventory.StellarShuttleControllerMenu
 
+@Suppress("unused")
 object ModMenus {
-
     @Suppress("DataFlowIssue")
     @JvmField
     val AUTO_AIM_TURRET_MENU: MenuEntry<AutoAimTurretMenu> = StellarExodusCore.REGISTRATE
         .menu(
             "auto_aim_turret",
-            { type: MenuType<AutoAimTurretMenu>, windowId: Int, inv: Inventory, data: FriendlyByteBuf? ->
-                AutoAimTurretMenu.create(type, windowId, inv, data)
-            },
-            { menu: AutoAimTurretMenu, inv: Inventory, displayName: Component ->
-
-            }
+            AutoAimTurretMenu::create,
+            ::AutoAimTurretScreen
         )
+        .register()
+
+    @Suppress("DataFlowIssue")
+    @JvmField
+    val STELLAR_SHUTTLE_CONTROLLER_MENU: MenuEntry<StellarShuttleControllerMenu> = StellarExodusCore.REGISTRATE
+        .menu(
+            "stellar_shuttle_controller",
+            StellarShuttleControllerMenu::create,
+            ::StellarShuttleControllerScreen
+        )
+        .register()
 
     @JvmStatic
     fun register() {

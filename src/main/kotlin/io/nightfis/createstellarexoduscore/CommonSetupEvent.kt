@@ -9,8 +9,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
 @Mod.EventBusSubscriber(modid = StellarExodusCore.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 object CommonSetupEvent {
 
-    @SubscribeEvent
     @JvmStatic
+    @SubscribeEvent
     fun commonSetup(event: FMLCommonSetupEvent) {
         TargetFilter.init()
         ModNetwork.init()

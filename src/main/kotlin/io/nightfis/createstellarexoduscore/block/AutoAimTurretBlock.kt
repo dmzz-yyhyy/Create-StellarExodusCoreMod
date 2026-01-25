@@ -53,7 +53,7 @@ class AutoAimTurretBlock(properties: Properties) : KineticBlock(properties), Ent
     }
 
     override fun hasShaftTowards(world: LevelReader, pos: BlockPos, state: BlockState, face: Direction): Boolean {
-        return face == state.getValue(HORIZONTAL_DIRECTION)
+        return face == Direction.DOWN
     }
 
     @Deprecated("Deprecated in Java")
@@ -67,7 +67,7 @@ class AutoAimTurretBlock(properties: Properties) : KineticBlock(properties), Ent
     }
 
     override fun getRotationAxis(state: BlockState): Axis {
-        return state.getValue(HORIZONTAL_DIRECTION).axis
+        return Axis.Y
     }
 
     override fun newBlockEntity(pos: BlockPos, state: BlockState): BlockEntity? {

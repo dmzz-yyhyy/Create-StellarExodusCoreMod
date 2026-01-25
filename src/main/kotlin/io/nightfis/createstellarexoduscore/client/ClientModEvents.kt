@@ -18,6 +18,10 @@ object ClientModEvents {
                 ModBlockEntities.AUTO_AIM_TURRET_ENTITY.get(),
                 ::AutoAimTurretRenderer
             )
+            BlockEntityRenderers.register(
+                ModBlockEntities.STELLAR_SHUTTLE_CONTROLLER.get(),
+                ::StellarShuttleControllerRenderer
+            )
         }
     }
 }
